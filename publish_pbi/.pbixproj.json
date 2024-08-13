@@ -1,0 +1,68 @@
+{
+    "version": "0.13",
+    "created": "2022-03-01T18:09:54.2556434+00:00",
+    "deployments": {
+      "Folders": {
+        "mode": "Dataset",
+        "source": {
+          "type": "Folder",
+          "path": "./nameFolder"
+        },
+        "authentication": {
+          "type": "ServicePrincipal",
+          "tenantId": "%PBI_TENANT_ID%",
+          "clientId": "%PBI_CLIENT_ID%",
+          "clientSecret": "%PBI_CLIENT_SECRET%"
+        },
+        "options": {
+          "import": {
+            "nameConflict": "CreateOrOverwrite"
+          },
+          "refresh": {
+            "enabled": true,
+            "skipNewDataset": false,
+            "method": "XMLA",
+            "type": "Full",
+            "tracing": {
+              "enabled": false,
+              "logEvents": {
+                "filter": ["*|TabularRefresh|Partition", "*|ReadData|Partition"]
+              },
+              "summary": {
+                "events": ["TabularRefresh", "Process", "ReadData", "ExecuteSql"],
+                "objectTypes": ["Partition"],
+                "outPath": "Deploy_Refresh_Stats.csv",
+                "console": true
+              }
+            }
+          },
+          "dataset": {
+            "replaceParameters": true,
+            "deployEmbeddedReport": true,
+            "gateway": {
+              "discoverGateways": true
+            }
+          }
+        },
+        "parameters": {
+          "[Version]": "1.1.1",
+          "[Environment]": "{{ENVIRONMENT}}",
+          "[PBITOOLS_VERSION]": "{{PBITOOLS_VERSION}}",
+          "[FILE_NAME_WITHOUT_EXT]": "{{FILE_NAME_WITHOUT_EXT}}",
+          "reportName": "{{REPORT_NAME}}"
+        },
+        "environments": {
+          "ENV_XXX": {
+            "workspace": "xxx",
+            "displayName": "xxx",
+            "parameters": {
+                "param_in_pbi": "x"
+            },
+            "refresh": {
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  }
